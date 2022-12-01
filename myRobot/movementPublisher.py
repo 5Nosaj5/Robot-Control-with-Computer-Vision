@@ -41,14 +41,11 @@ class velocityPublisher(Node):
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher_ = self.create_publisher(Twist, '/cmd_vel', 10)
-        timer_period = 1  # seconds
+        timer_period = 0.25  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0
 
     def timer_callback(self):
         msg = Twist()
-        
-
 
         def get_label(index, hand, results):
             output = None
@@ -116,7 +113,8 @@ class velocityPublisher(Node):
             min_tracking_confidence=0.5) as hands: #define hand model with tolerances
 
             start = time.time()
-
+            sendCommand = True
+            
             while cap.isOpened():
 
                 success, image = cap.read() 
@@ -168,32 +166,33 @@ class velocityPublisher(Node):
                     if myGesture == 'stop':
                         msg.linear.x = 0.0
                         msg.angular.z = 0.0
-                        print('stop')
-                    if myGesture == 'left':
+                        print('Stop')
+                    elif myGesture == 'left':
                         msg.angular.z = 2.0
-                        print('left')
-                    if myGesture == 'right':
+                        print('Turn left')
+                    elif myGesture == 'right':
                         msg.angular.z = -2.0
-                        print('right')
-                    if myGesture == 'speed1':
+                        print('Turn right')
+                    elif myGesture == 'speed1':
                         msg.linear.x = 1.0
-                        print('speed1')
-                    if myGesture == 'speed2':
+                        print('Speed 1')
+                    elif myGesture == 'speed2':
                         msg.linear.x = 2.5
-                        print('speed2')
-                    if myGesture == 'speed3':
+                        print('Speed 2')
+                    elif myGesture == 'speed3':
                         msg.linear.x = 5.0
-                        print('speed3')
+                        print('Speed 3')
+                    elif myGesture == 'Unknown':
+                        print('Unknown command')
+                        sendCommand = False
+                
                 end = time.time()
                 totalTime = end - start
-                
-                if totalTime >= 0.75:
+                if totalTime >= 0.125:
                     break
-
-        self.publisher_.publish(msg)
-        self.get_logger().info('Sending: "%s"' % msg)
-        self.i += 1
-
+        
+        if sendCommand:
+            self.publisher_.publish(msg)
 
 
 def main(args=None):
