@@ -1,6 +1,6 @@
 # ME369P-U19
 ME 369P Project
-The goal of our final project was to develop create a robot simultaion that would be able to have its movements controlled using gesture recognition. Below we will explain the different aspects of our code and how each program works.
+The goal of our final project was to develop create a robot simulation that would be able to have its movements controlled using gesture recognition. Below we will explain the different aspects of our code and how each program works.
 
 Training Gesture Recognition Inputs(Final_Project_Hand_Detection.py)
 1. Open Final_Project_Hand_Detection.py
